@@ -16,7 +16,7 @@ interface HAStrategiesConfig extends StrategyConfig {
   type: 'custom:ha-strategies';
 }
 
-@customElement('ha-strategies')
+@customElement('ll-strategy-dashboard-ha-strategies')
 export class HAStrategies extends LitElement {
   @property({ attribute: false }) public hass: any;
   @property({ attribute: false }) public config!: HAStrategiesConfig;
@@ -82,6 +82,6 @@ console.info(
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ha-strategies': HAStrategies;
+    'll-strategy-dashboard-ha-strategies': HAStrategies;
   }
 }
