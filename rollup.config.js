@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 const terser = require('@rollup/plugin-terser');
 
 export default {
-  input: 'src/ha-strategies.ts',
+  input: 'src/index.ts',
   output: {
     file: 'dist/ha-strategies.js',
     format: 'es',
