@@ -1,0 +1,44 @@
+{
+  "name": "ha-strategies",
+  "version": "1.0.0",
+  "description": "Home Assistant Lovelace Strategies",
+  "type": "module",
+  "main": "dist/ha-strategies.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix"
+  },
+  "keywords": [
+    "home-assistant",
+    "lovelace",
+    "strategy",
+    "hacs",
+    "dashboard"
+  ],
+  "author": "JetsonControls",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jetsoncontrols/ha-strategies.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jetsoncontrols/ha-strategies/issues"
+  },
+  "homepage": "https://github.com/jetsoncontrols/ha-strategies#readme",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.0.0",
+    "rollup": "^3.0.0",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "lit": "^2.7.0"
+  }
+}

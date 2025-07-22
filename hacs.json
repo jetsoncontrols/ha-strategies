@@ -1,0 +1,9 @@
+{
+  "name": "HA Strategies",
+  "content_in_root": false,
+  "filename": "ha-strategies.js",
+  "country": ["US"],
+  "homeassistant": "2023.1.0",
+  "render_readme": true,
+  "iot_class": "Local Push"
+}
