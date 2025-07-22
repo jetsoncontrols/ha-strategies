@@ -66,6 +66,25 @@ export class HAStrategies extends LitElement {
   }
 }
 
+// Ensure the element is immediately available
+if (!customElements.get('ll-strategy-dashboard-ha-strategies')) {
+  customElements.define('ll-strategy-dashboard-ha-strategies', HAStrategies);
+}
+
+// Make sure the element is available when the DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!customElements.get('ll-strategy-dashboard-ha-strategies')) {
+      customElements.define('ll-strategy-dashboard-ha-strategies', HAStrategies);
+    }
+  });
+} else {
+  // DOM is already ready
+  if (!customElements.get('ll-strategy-dashboard-ha-strategies')) {
+    customElements.define('ll-strategy-dashboard-ha-strategies', HAStrategies);
+  }
+}
+
 // Register the strategy
 (window as any).customCards = (window as any).customCards || [];
 (window as any).customCards.push({

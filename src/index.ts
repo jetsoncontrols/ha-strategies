@@ -1,1 +1,1 @@
-export { HAStrategies } from './ha-strategies.js';
+export { HAStrategies } from './ha-strategies';
