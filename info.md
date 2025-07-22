@@ -6,7 +6,7 @@ Home Assistant Lovelace Strategies for enhanced dashboard configuration and mana
 
 - Custom Lovelace strategies for Home Assistant dashboards
 - Modular and extensible design
-- Easy installation via HACS (Home Assistant Community Store)
+- Easy installation via HACS (Home Assistant Community Store) as a custom repository
 
 ## Installation
 
@@ -14,9 +14,12 @@ Home Assistant Lovelace Strategies for enhanced dashboard configuration and mana
 
 1. Open HACS in your Home Assistant instance
 2. Go to "Frontend" section
-3. Click the "+" button
-4. Search for "HA Strategies"
-5. Install the repository
+3. Click the three dots in the top right corner
+4. Select "Custom repositories"
+5. Add `https://github.com/jetsoncontrols/ha-strategies` as the repository URL
+6. Select "Lovelace" as the category
+7. Click "Add"
+8. Find "HA Strategies" in the list and install it
 
 ### Manual Installation
 
