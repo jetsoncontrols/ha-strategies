@@ -39,6 +39,5 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "lit": "^2.7.0"
   }
 }
