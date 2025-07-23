@@ -17,6 +17,9 @@ export class HaStrategies extends HTMLElement {
     // Log strategy options to console
     console.info('HA-STRATEGIES: Strategy options:', config);
     
+    // Capture generation time
+    const generationTime = new Date().toLocaleString();
+    
     // Get all light entities from Home Assistant
     const lightEntities = Object.keys(hass.states)
       .filter(entityId => entityId.startsWith('light.'))
@@ -41,6 +44,22 @@ export class HaStrategies extends HTMLElement {
       }
     ];
     
+    // Create admin content with generation time and options
+    const configDisplay = JSON.stringify(config, null, 2);
+    const adminContent = `# Admin Information
+
+## Generation Time
+**Generated:** ${generationTime}
+
+## Strategy Options
+\`\`\`json
+${configDisplay}
+\`\`\`
+
+## Statistics
+- **Light Entities Found:** ${lightEntities.length}
+- **Strategy Type:** ${config.type}`;
+
     return {
       title: "Lighting Dashboard",
       views: [
@@ -48,6 +67,16 @@ export class HaStrategies extends HTMLElement {
           title: "Lights",
           path: "lights",
           cards: cards
+        },
+        {
+          title: "Admin",
+          path: "admin",
+          cards: [
+            {
+              type: 'markdown',
+              content: adminContent
+            }
+          ]
         }
       ]
     };
