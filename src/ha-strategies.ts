@@ -13,7 +13,19 @@ export class StrategyDemo extends HTMLElement {
   /**
    * Generate the Lovelace configuration based on the strategy
    */
-  static async generate(_config: StrategyConfig, _hass: any): Promise<LovelaceConfig> {
+  static async generate(config: StrategyConfig, _hass: any): Promise<LovelaceConfig> {
+    // Log strategy options to console
+    console.info('HA-STRATEGIES: Strategy options:', config);
+    
+    // Format strategy options for display in markdown
+    const optionsText = Object.keys(config)
+      .filter(key => key !== 'type') // Exclude the type field as it's always the strategy name
+      .map(key => `- **${key}**: ${JSON.stringify(config[key])}`)
+      .join('\n');
+    
+    const hasOptions = optionsText.length > 0;
+    const optionsSection = hasOptions ? `\n\n**Strategy Options:**\n${optionsText}` : '\n\n*No additional options configured*';
+    
     return {
       title: "Generated Dashboard",
       views: [
@@ -21,7 +33,7 @@ export class StrategyDemo extends HTMLElement {
           "cards": [
             {
               "type": "markdown",
-              "content": `Generated at ${(new Date).toLocaleString()}`
+              "content": `Generated at ${(new Date).toLocaleString()}${optionsSection}`
             }
           ]
         }
