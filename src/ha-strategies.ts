@@ -9,33 +9,45 @@ interface StrategyConfig {
   [key: string]: any;
 }
 
-export class StrategyDemo extends HTMLElement {
+export class HaStrategies extends HTMLElement {
   /**
    * Generate the Lovelace configuration based on the strategy
    */
-  static async generate(config: StrategyConfig, _hass: any): Promise<LovelaceConfig> {
+  static async generate(config: StrategyConfig, hass: any): Promise<LovelaceConfig> {
     // Log strategy options to console
     console.info('HA-STRATEGIES: Strategy options:', config);
     
-    // Format strategy options for display in markdown
-    const optionsText = Object.keys(config)
-      .filter(key => key !== 'type') // Exclude the type field as it's always the strategy name
-      .map(key => `- **${key}**: ${JSON.stringify(config[key])}`)
-      .join('\n');
+    // Get all light entities from Home Assistant
+    const lightEntities = Object.keys(hass.states)
+      .filter(entityId => entityId.startsWith('light.'))
+      .map(entityId => hass.states[entityId]);
     
-    const hasOptions = optionsText.length > 0;
-    const optionsSection = hasOptions ? `\n\n**Strategy Options:**\n${optionsText}` : '\n\n*No additional options configured*';
+    // Create tile cards for each light
+    const lightCards = lightEntities.map(entity => ({
+      type: 'tile',
+      entity: entity.entity_id,
+      name: entity.attributes.friendly_name || entity.entity_id,
+      show_entity_picture: false,
+      tap_action: {
+        action: 'toggle'
+      }
+    }));
+    
+    // If no lights found, show a message
+    const cards = lightCards.length > 0 ? lightCards : [
+      {
+        type: 'markdown',
+        content: 'No light entities found in your Home Assistant system.'
+      }
+    ];
     
     return {
-      title: "Generated Dashboard",
+      title: "Lighting Dashboard",
       views: [
         {
-          "cards": [
-            {
-              "type": "markdown",
-              "content": `Generated at ${(new Date).toLocaleString()}${optionsSection}`
-            }
-          ]
+          title: "Lights",
+          path: "lights",
+          cards: cards
         }
       ]
     };
@@ -45,11 +57,11 @@ export class StrategyDemo extends HTMLElement {
 // Register the strategy for Home Assistant to use
 if (typeof window !== 'undefined') {
   // Register as custom element for Home Assistant to find
-  customElements.define('ll-strategy-dashboard-ha-strategies', StrategyDemo);
+  customElements.define('ll-strategy-dashboard-ha-strategies', HaStrategies);
   
   // Also register in customStrategies for backward compatibility
   (window as any).customStrategies = (window as any).customStrategies || {};
-  (window as any).customStrategies['custom:ha-strategies'] = StrategyDemo;
+  (window as any).customStrategies['custom:ha-strategies'] = HaStrategies;
 
   console.info(
     '%c  HA-STRATEGIES  %c  1.0.0  ',

@@ -1,1 +1,1 @@
-export { StrategyDemo } from './ha-strategies';
+export { HaStrategies } from './ha-strategies';
