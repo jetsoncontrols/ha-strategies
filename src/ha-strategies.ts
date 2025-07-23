@@ -9,7 +9,7 @@ interface StrategyConfig {
   [key: string]: any;
 }
 
-export class StrategyDemo {
+export class StrategyDemo extends HTMLElement {
   /**
    * Generate the Lovelace configuration based on the strategy
    */
@@ -32,6 +32,10 @@ export class StrategyDemo {
 
 // Register the strategy for Home Assistant to use
 if (typeof window !== 'undefined') {
+  // Register as custom element for Home Assistant to find
+  customElements.define('ll-strategy-dashboard-ha-strategies', StrategyDemo);
+  
+  // Also register in customStrategies for backward compatibility
   (window as any).customStrategies = (window as any).customStrategies || {};
   (window as any).customStrategies['custom:ha-strategies'] = StrategyDemo;
 
