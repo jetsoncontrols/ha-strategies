@@ -4,8 +4,15 @@ interface LovelaceConfig {
   [key: string]: any;
 }
 
+interface LightsConfig {
+  integrations?: string[];
+}
+
 interface StrategyConfig {
   type: string;
+  lights?: LightsConfig;
+  // Deprecated: for backward compatibility only
+  integrations?: string[];
   [key: string]: any;
 }
 
@@ -21,9 +28,29 @@ export class HaStrategies extends HTMLElement {
     const generationTime = new Date().toLocaleString();
     
     // Get all light entities from Home Assistant
-    const lightEntities = Object.keys(hass.states)
+    const allLightEntities = Object.keys(hass.states)
       .filter(entityId => entityId.startsWith('light.'))
       .map(entityId => hass.states[entityId]);
+    
+    // Get lighting integrations filter - support both new structure and backward compatibility
+    const lightIntegrations = config.lights?.integrations || config.integrations;
+    
+    // Filter by integrations if specified
+    let lightEntities = allLightEntities;
+    if (lightIntegrations && lightIntegrations.length > 0) {
+      lightEntities = allLightEntities.filter(entity => {
+        // Check if entity belongs to any of the specified integrations
+        const entityPlatform = entity.attributes?.source_type || 
+                              entity.attributes?.platform || 
+                              entity.platform ||
+                              entity.entity_id.split('.')[1]?.split('_')[0]; // fallback: extract from entity_id
+        
+        return lightIntegrations.some(integration => 
+          entityPlatform?.toLowerCase().includes(integration.toLowerCase()) ||
+          entity.entity_id.toLowerCase().includes(integration.toLowerCase())
+        );
+      });
+    }
     
     // Create tile cards for each light
     const lightCards = lightEntities.map(entity => ({
@@ -46,6 +73,10 @@ export class HaStrategies extends HTMLElement {
     
     // Create admin content with generation time and options
     const configDisplay = JSON.stringify(config, null, 2);
+    const integrationInfo = lightIntegrations && lightIntegrations.length > 0 
+      ? `- **Filtered by Integrations:** ${lightIntegrations.join(', ')}\n- **Total Light Entities:** ${allLightEntities.length}\n- **Filtered Light Entities:** ${lightEntities.length}`
+      : `- **Integration Filter:** None (showing all lights)\n- **Total Light Entities:** ${lightEntities.length}`;
+    
     const adminContent = `# Admin Information
 
 ## Generation Time
@@ -57,7 +88,7 @@ ${configDisplay}
 \`\`\`
 
 ## Statistics
-- **Light Entities Found:** ${lightEntities.length}
+${integrationInfo}
 - **Strategy Type:** ${config.type}`;
 
     return {

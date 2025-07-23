@@ -46,7 +46,63 @@ Add the strategy to your Lovelace dashboard configuration:
 ```yaml
 strategy:
   type: custom:ha-strategies
-  # Add your configuration options here
+  # Optional: Filter lights by specific integrations
+  lights:
+    integrations:
+      - philips_hue
+      - lifx
+      - tradfri
+```
+
+### Configuration Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `lights.integrations` | `string[]` | `undefined` | List of integration names to filter lights by. If not specified, all lights are included. |
+
+> **Note:** The legacy `integrations` option (at root level) is still supported for backward compatibility but is deprecated. Please use `lights.integrations` for new configurations.
+
+### Integration Filtering
+
+The strategy can filter light entities by specific Home Assistant integrations using the `lights.integrations` configuration. Common integration names include:
+
+- `philips_hue` - Philips Hue lights
+- `lifx` - LIFX smart lights  
+- `tradfri` - IKEA TRÅDFRI lights
+- `zwave_js` - Z-Wave lights
+- `zigbee2mqtt` - Zigbee2MQTT lights
+- `wiz` - WiZ Connected lights
+- `tplink` - TP-Link Kasa lights
+- `tuya` - Tuya/Smart Life lights
+
+When no `lights.integrations` option is provided, all light entities in your Home Assistant system will be included (default behavior).
+
+### Examples
+
+**Show all lights (default):**
+```yaml
+strategy:
+  type: custom:ha-strategies
+```
+
+**Filter by single integration:**
+```yaml
+strategy:
+  type: custom:ha-strategies
+  lights:
+    integrations:
+      - philips_hue
+```
+
+**Filter by multiple integrations:**
+```yaml
+strategy:
+  type: custom:ha-strategies
+  lights:
+    integrations:
+      - philips_hue
+      - lifx
+      - tradfri
 ```
 
 ## Development
