@@ -30,19 +30,10 @@ export class StrategyDemo {
   }
 }
 
-// Simple strategy doesn't need to be a custom element
-// Just make it available globally for Home Assistant to use
+// Register the strategy for Home Assistant to use
 if (typeof window !== 'undefined') {
   (window as any).customStrategies = (window as any).customStrategies || {};
-  (window as any).customStrategies['ha-strategies-demo'] = StrategyDemo;
-
-  // Register the strategy for discovery
-  (window as any).customCards = (window as any).customCards || [];
-  (window as any).customCards.push({
-    type: 'ha-strategies',
-    name: 'HA Strategies Demo',
-    description: 'Simple demo strategy for Home Assistant Lovelace'
-  });
+  (window as any).customStrategies['custom:ha-strategies'] = StrategyDemo;
 
   console.info(
     '%c  HA-STRATEGIES  %c  1.0.0  ',
