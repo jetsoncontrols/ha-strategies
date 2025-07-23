@@ -6,6 +6,7 @@ interface LovelaceConfig {
 
 interface StrategyConfig {
   type: string;
+  integrations?: string[];
   [key: string]: any;
 }
 
@@ -21,9 +22,26 @@ export class HaStrategies extends HTMLElement {
     const generationTime = new Date().toLocaleString();
     
     // Get all light entities from Home Assistant
-    const lightEntities = Object.keys(hass.states)
+    const allLightEntities = Object.keys(hass.states)
       .filter(entityId => entityId.startsWith('light.'))
       .map(entityId => hass.states[entityId]);
+    
+    // Filter by integrations if specified
+    let lightEntities = allLightEntities;
+    if (config.integrations && config.integrations.length > 0) {
+      lightEntities = allLightEntities.filter(entity => {
+        // Check if entity belongs to any of the specified integrations
+        const entityPlatform = entity.attributes?.source_type || 
+                              entity.attributes?.platform || 
+                              entity.platform ||
+                              entity.entity_id.split('.')[1]?.split('_')[0]; // fallback: extract from entity_id
+        
+        return config.integrations!.some(integration => 
+          entityPlatform?.toLowerCase().includes(integration.toLowerCase()) ||
+          entity.entity_id.toLowerCase().includes(integration.toLowerCase())
+        );
+      });
+    }
     
     // Create tile cards for each light
     const lightCards = lightEntities.map(entity => ({
@@ -46,6 +64,10 @@ export class HaStrategies extends HTMLElement {
     
     // Create admin content with generation time and options
     const configDisplay = JSON.stringify(config, null, 2);
+    const integrationInfo = config.integrations && config.integrations.length > 0 
+      ? `- **Filtered by Integrations:** ${config.integrations.join(', ')}\n- **Total Light Entities:** ${allLightEntities.length}\n- **Filtered Light Entities:** ${lightEntities.length}`
+      : `- **Integration Filter:** None (showing all lights)\n- **Total Light Entities:** ${lightEntities.length}`;
+    
     const adminContent = `# Admin Information
 
 ## Generation Time
@@ -57,7 +79,7 @@ ${configDisplay}
 \`\`\`
 
 ## Statistics
-- **Light Entities Found:** ${lightEntities.length}
+${integrationInfo}
 - **Strategy Type:** ${config.type}`;
 
     return {
