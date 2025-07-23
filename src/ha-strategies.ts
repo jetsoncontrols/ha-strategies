@@ -4,8 +4,14 @@ interface LovelaceConfig {
   [key: string]: any;
 }
 
+interface LightsConfig {
+  integrations?: string[];
+}
+
 interface StrategyConfig {
   type: string;
+  lights?: LightsConfig;
+  // Deprecated: for backward compatibility only
   integrations?: string[];
   [key: string]: any;
 }
@@ -26,9 +32,12 @@ export class HaStrategies extends HTMLElement {
       .filter(entityId => entityId.startsWith('light.'))
       .map(entityId => hass.states[entityId]);
     
+    // Get integrations filter - support both new structure and backward compatibility
+    const integrations = config.lights?.integrations || config.integrations;
+    
     // Filter by integrations if specified
     let lightEntities = allLightEntities;
-    if (config.integrations && config.integrations.length > 0) {
+    if (integrations && integrations.length > 0) {
       lightEntities = allLightEntities.filter(entity => {
         // Check if entity belongs to any of the specified integrations
         const entityPlatform = entity.attributes?.source_type || 
@@ -36,7 +45,7 @@ export class HaStrategies extends HTMLElement {
                               entity.platform ||
                               entity.entity_id.split('.')[1]?.split('_')[0]; // fallback: extract from entity_id
         
-        return config.integrations!.some(integration => 
+        return integrations.some(integration => 
           entityPlatform?.toLowerCase().includes(integration.toLowerCase()) ||
           entity.entity_id.toLowerCase().includes(integration.toLowerCase())
         );
@@ -64,8 +73,8 @@ export class HaStrategies extends HTMLElement {
     
     // Create admin content with generation time and options
     const configDisplay = JSON.stringify(config, null, 2);
-    const integrationInfo = config.integrations && config.integrations.length > 0 
-      ? `- **Filtered by Integrations:** ${config.integrations.join(', ')}\n- **Total Light Entities:** ${allLightEntities.length}\n- **Filtered Light Entities:** ${lightEntities.length}`
+    const integrationInfo = integrations && integrations.length > 0 
+      ? `- **Filtered by Integrations:** ${integrations.join(', ')}\n- **Total Light Entities:** ${allLightEntities.length}\n- **Filtered Light Entities:** ${lightEntities.length}`
       : `- **Integration Filter:** None (showing all lights)\n- **Total Light Entities:** ${lightEntities.length}`;
     
     const adminContent = `# Admin Information

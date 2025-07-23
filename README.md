@@ -47,21 +47,24 @@ Add the strategy to your Lovelace dashboard configuration:
 strategy:
   type: custom:ha-strategies
   # Optional: Filter lights by specific integrations
-  integrations:
-    - philips_hue
-    - lifx
-    - tradfri
+  lights:
+    integrations:
+      - philips_hue
+      - lifx
+      - tradfri
 ```
 
 ### Configuration Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `integrations` | `string[]` | `undefined` | List of integration names to filter lights by. If not specified, all lights are included. |
+| `lights.integrations` | `string[]` | `undefined` | List of integration names to filter lights by. If not specified, all lights are included. |
+
+> **Note:** The legacy `integrations` option (at root level) is still supported for backward compatibility but is deprecated. Please use `lights.integrations` for new configurations.
 
 ### Integration Filtering
 
-The strategy can filter light entities by specific Home Assistant integrations. Common integration names include:
+The strategy can filter light entities by specific Home Assistant integrations using the `lights.integrations` configuration. Common integration names include:
 
 - `philips_hue` - Philips Hue lights
 - `lifx` - LIFX smart lights  
@@ -72,7 +75,7 @@ The strategy can filter light entities by specific Home Assistant integrations. 
 - `tplink` - TP-Link Kasa lights
 - `tuya` - Tuya/Smart Life lights
 
-When no `integrations` option is provided, all light entities in your Home Assistant system will be included (default behavior).
+When no `lights.integrations` option is provided, all light entities in your Home Assistant system will be included (default behavior).
 
 ### Examples
 
@@ -86,18 +89,20 @@ strategy:
 ```yaml
 strategy:
   type: custom:ha-strategies
-  integrations:
-    - philips_hue
+  lights:
+    integrations:
+      - philips_hue
 ```
 
 **Filter by multiple integrations:**
 ```yaml
 strategy:
   type: custom:ha-strategies
-  integrations:
-    - philips_hue
-    - lifx
-    - tradfri
+  lights:
+    integrations:
+      - philips_hue
+      - lifx
+      - tradfri
 ```
 
 ## Development
