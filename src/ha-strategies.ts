@@ -12,7 +12,6 @@ interface StrategyConfig {
   type: string;
   lights?: LightsConfig;
   // Deprecated: for backward compatibility only
-  integrations?: string[];
   [key: string]: any;
 }
 
@@ -21,19 +20,14 @@ export class HaStrategies extends HTMLElement {
    * Generate the Lovelace configuration based on the strategy
    */
   static async generate(config: StrategyConfig, hass: any): Promise<LovelaceConfig> {
-    // Log strategy options to console
     console.info('HA-STRATEGIES: Strategy options:', config);
-    
-    // Capture generation time
     const generationTime = new Date().toLocaleString();
     
-    // Get all light entities from Home Assistant
     const allLightEntities = Object.keys(hass.states)
       .filter(entityId => entityId.startsWith('light.'))
       .map(entityId => hass.states[entityId]);
     
-    // Get lighting integrations filter - support both new structure and backward compatibility
-    const lightIntegrations = config.lights?.integrations || config.integrations;
+    const lightIntegrations = config.lights?.integrations;
     
     // Filter by integrations if specified
     let lightEntities = allLightEntities;
@@ -67,7 +61,7 @@ export class HaStrategies extends HTMLElement {
     const cards = lightCards.length > 0 ? lightCards : [
       {
         type: 'markdown',
-        content: 'No light entities found in your Home Assistant system.'
+        content: 'No light entities found.'
       }
     ];
     
