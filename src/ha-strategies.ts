@@ -63,7 +63,7 @@ ${configDisplay}
         {
           title: "Lights",
           path: "lights",
-          cards: await LightsView.generate(hass)
+          cards: cards
         },
         {
           title: "Admin",
