@@ -1,0 +1,3 @@
+class LightView extends AbstractView {
+
+}
