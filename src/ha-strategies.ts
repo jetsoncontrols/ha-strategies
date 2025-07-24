@@ -80,5 +80,28 @@ ${configDisplay}
   }
 }
 
+
+
+
+
+if (typeof window !== 'undefined') {
+  // Register as custom element for Home Assistant to find
+  customElements.define('ll-strategy-dashboard-ha-strategies', HaStrategies);
+  
+  // Also register in customStrategies for backward compatibility
+  (window as any).customStrategies = (window as any).customStrategies || {};
+  (window as any).customStrategies['custom:ha-strategies'] = HaStrategies;
+
+  console.info(
+    '%c  HA-STRATEGIES  %c  1.0.0  ',
+    'color: orange; font-weight: bold; background: black',
+    'color: white; font-weight: bold; background: dimgray'
+  );
+}
+
+
+
+
+
 // Register the strategy for Home Assistant to use
-customElements.define('ll-strategy-dashboard-ha-strategies', HaStrategies);
+// customElements.define('ll-strategy-dashboard-ha-strategies', HaStrategies);
