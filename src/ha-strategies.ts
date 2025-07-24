@@ -1,3 +1,5 @@
+import LightsView from "./views/LightsView";
+
 interface LovelaceConfig {
   title?: string;
   views?: any[];
@@ -37,6 +39,8 @@ export class HaStrategies extends HTMLElement {
       }
     ];
     
+
+
     // Create admin content with generation time and options
     const configDisplay = JSON.stringify(config, null, 2);
     const adminContent = `# Admin Information
@@ -52,13 +56,14 @@ ${configDisplay}
 ## Statistics
 - **Strategy Type:** ${config.type}`;
 
+    const generationEndTime = new Date();
     return {
       title: "Lighting Dashboard",
       views: [
         {
           title: "Lights",
           path: "lights",
-          cards: cards
+          cards: await LightsView.generate(hass)
         },
         {
           title: "Admin",
