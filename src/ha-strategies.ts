@@ -34,6 +34,7 @@ export class HaStrategies extends HTMLElement {
     if (lightIntegrations && lightIntegrations.length > 0) {
       lightEntities = allLightEntities.filter(entity => {
         // Check if entity belongs to any of the specified integrations
+        console.info('HA-STRATEGIES: Entity Platform: ', entity.attributes?.platform);
         const entityPlatform = entity.attributes?.source_type || 
                               entity.attributes?.platform || 
                               entity.platform ||
