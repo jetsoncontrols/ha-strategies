@@ -1,3 +1,3 @@
-abstract class AbstractCard {
+// abstract class AbstractCard {
     
-}
+// }

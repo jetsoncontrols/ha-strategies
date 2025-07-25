@@ -28,6 +28,8 @@
   },
   "homepage": "https://github.com/jetsoncontrols/ha-strategies#readme",
   "devDependencies": {
+    "home-assistant-js-websocket": "^9.5.0",
+    "superstruct": "^2.0.2",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.0.0",
@@ -39,5 +41,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "deepmerge": "^4"
   }
 }

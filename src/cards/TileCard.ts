@@ -1,3 +1,3 @@
-class TileCard extends AbstractCard {
+// class TileCard extends AbstractCard {
 
-}
+// }
